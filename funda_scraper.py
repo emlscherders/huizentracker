@@ -119,23 +119,25 @@ def main():
                                         ENERGY_LABEL )
 
     new_count = 0
+    list_count = 0
 
     for listing in listings:
-        print(vars(listing))  # Print volledige listing data
+        print(f"Listing number {list_count}: {vars(listing)}")  # Print volledige listing data
+        list_count += 1
 
         # ---- Extra filtering in Python ----
         if listing['price'] > PRICE_MAX:
-            print("asking price too high")
+            print("Filtered: Asking price too high")
             print(listing['price'])
             continue
 
         if listing["living_area"] < AREA_MIN:
-            print("living area too small")
+            print("Filtered: Living area too small")
             print(listing["living_area"])
             continue
 
         if not is_within_ring(listing['postcode']):
-            print("not within ring")
+            print("Filtered: Not within ring")
             print(listing['postcode'])
             continue
 
@@ -145,6 +147,7 @@ def main():
         #     continue
 
         if listing.getID() in existing_ids:
+            print("Filtered: Already exists in database")
             continue
 
 
