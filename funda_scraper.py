@@ -98,7 +98,7 @@ def transform_listing(listing):
         "price": listing.get("price"),
         "surface_m2": listing.get("living_area"),
         "bedrooms": listing.get("bedrooms"),
-        "url": f"funda.nl{listing.get('detail_url')}",
+        "url": f"https://www.funda.nl{listing.get('detail_url')}",
         "status": "nieuw"
     }
 
