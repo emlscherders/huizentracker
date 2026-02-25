@@ -221,11 +221,6 @@ def page_overview():
             "bezichtiging geweest"
         ],
         "💰 Bieden": ["bod gedaan"],
-        "❌ Afgevallen": [
-            "niet geïnteresseerd",
-            "niet geboden",
-            "bod niet geaccepteerd"
-        ],
         "🏆 JAVA PALACE": ["bod geaccepteerd"]
     }
 
@@ -366,7 +361,106 @@ def page_overview():
                 #     label_visibility="collapsed"
                 # )
                 
+def page_archief():
 
+    st.title("📦 Archief")
+
+    data = get_all_houses()
+
+    if not data:
+        st.info("Geen data beschikbaar.")
+        return
+
+    df = pd.DataFrame(data)
+
+    archive_status_priority = {
+        "bod niet geaccepteerd": 0,
+        "niet geboden": 1,
+        "niet geïnteresseerd": 2
+    }
+
+    archive_statuses = list(archive_status_priority.keys())
+
+    df = df[df["status"].isin(archive_statuses)]
+
+    # Sorting
+    df["sort_key"] = df["status"].map(archive_status_priority)
+    df = df.sort_values("sort_key")
+
+    # Status flag styling
+    def status_style(val):
+        return f"""
+        background:{status_color(val)};
+        padding:4px 8px;
+        border-radius:6px;
+        font-size:12px;
+        font-weight:600;
+        """
+
+    # Render list
+    for _, row in df.iterrows():
+
+        card_html = f"""
+        <a href="{row['url']}" target="_blank" style="text-decoration:none;">
+        
+        <div style="
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        
+            border-radius:14px;
+            border:1px solid rgba(229,231,235,0.6);
+        
+            padding:14px;
+            margin-bottom:12px;
+        
+            cursor:pointer;
+            transition:all 0.25s ease;
+        
+            font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        
+            box-shadow:0 4px 20px rgba(0,0,0,0.05);
+        "
+        onmouseover="this.style.transform='translateY(-3px)'"
+        onmouseout="this.style.transform='translateY(0px)'">
+        
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+        
+                <div style="
+                    font-size:16px;
+                    font-weight:600;
+                    color:#111827;
+                    line-height:1.35;
+                    padding-right:12px;
+                ">
+                    {row["address"]}
+                </div>
+        
+                <span style="
+                    background:{status_color(row['status'])};
+                    padding:4px 8px;
+                    border-radius:6px;
+                    font-size:11px;
+                    font-weight:600;
+                ">
+                    {row["status"]}
+                </span>
+        
+            </div>
+        
+            <div style="
+                font-size:14px;
+                color:#374151;
+                margin-top:8px;
+            ">
+                💰 € {row["price"]} · 📏 {row["surface_m2"]} m² · {row["bedrooms"]} slpk
+            </div>
+        
+        </div>
+        
+        </a>
+        """
+        components.html(card_html, height=140, scrolling=False)
 # -----------------------------
 # MAIN APP
 # -----------------------------
@@ -376,13 +470,16 @@ def main():
 
     page = st.sidebar.radio(
         "Navigation",
-        ["🆕 Nieuwe huizen", "📊 Overzicht"]
+        ["🆕 Nieuwe huizen", "📊 Overzicht", "📦 Archief"]
     )
 
     if page.startswith("🆕"):
         page_new_houses()
     else:
-        page_overview()
+        if page == "📊 Overzicht":
+            page_overview()
+        elif page == "📦 Archief":
+            page_archief()
 
 
 if __name__ == "__main__":
