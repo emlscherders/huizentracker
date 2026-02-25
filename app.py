@@ -328,33 +328,6 @@ def page_overview():
                 #     label_visibility="collapsed"
                 # )
                 
-def page_overvieww():
-    st.title("📊 Overzicht")
-
-    data = get_all_houses()
-
-    if not data:
-        st.info("Geen data beschikbaar.")
-        return
-
-    df = pd.DataFrame(data)
-
-    df = df[["address", "status","price", "url"]]
-
-    df = df.rename(columns={
-        "address": "Straat",
-        "status": "Status",
-        "price": "Vraagprijs",
-         "url": "Link",
-    })
-
-    def style_status(val):
-        return f"background-color: {status_color(val)}"
-
-    styled = df.style.applymap(style_status, subset=["Status"])
-
-    st.dataframe(styled, use_container_width=True)
-
 
 # -----------------------------
 # MAIN APP
