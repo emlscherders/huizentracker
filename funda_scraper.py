@@ -24,6 +24,7 @@ PLOT_MIN=None
 PLOT_MAX=None
 OBJECT_TYPE=None
 ENERGY_LABEL=None
+MAX_PAGES = 2
 ALLOWED_POSTCODES = {
     *range(1011, 1020), #   centrum/aan IJ: 1011–1019
     *range(1051, 1060), #   west:            1051–1059
@@ -50,7 +51,7 @@ def fetch_funda_listings(
         ENERGY_LABEL=None):
 
     all_results = []
-    for page in range(5):
+    for page in range(MAX_PAGES):
         results = funda.search_listing(
             location=LOCATION,           # City or area name
             offering_type=OFFERING_TYPE,            # 'buy' or 'rent'
