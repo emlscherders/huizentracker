@@ -24,6 +24,13 @@ PLOT_MIN=None
 PLOT_MAX=None
 OBJECT_TYPE=None
 ENERGY_LABEL=None
+ALLOWED_POSTCODES = {
+    *range(1011, 1020), #   centrum/aan IJ: 1011–1019
+    *range(1051, 1060), #   west:            1051–1059
+    *range(1071, 1080), #   zuid:            1071–1079
+    *range(1091, 1095), #   oost:           1091–1093
+    *range(1096, 1099), #   oost:            1096–1098
+}
 
 def get_existing_ids():
     response = supabase.table("houses").select("id").execute()
@@ -62,18 +69,21 @@ def fetch_funda_listings(
     return all_results
 
 
-def is_within_ring(postal_code):
-    """
-    Simpele benadering:
-    Binnen ring globaal: 1011–1098 
+
+def is_within_ring(postal_code: str, ALLOWED_POSTCODES) -> bool:
+    """Return ``True`` if the listing's postcode prefix is in the allowed set.
+
+    ``postal_code`` is expected to be a string such as ``"1015 BX"``.  We
+    extract the first four digits and convert them to an integer before
+    checking membership in :data:`ALLOWED_POSTCODES`.
     """
     if not postal_code:
         return False
 
     try:
         prefix = int(postal_code[:4])
-        return 1011 <= prefix <= 1098
-    except:
+        return prefix in ALLOWED_POSTCODES
+    except Exception:
         return False
 
 
@@ -136,7 +146,7 @@ def main():
             print(listing["living_area"])
             continue
 
-        if not is_within_ring(listing['postcode']):
+        if not is_within_ring(listing['postcode'], ALLOWED_POSTCODES):
             print("Filtered: Not within ring")
             print(listing['postcode'])
             continue
