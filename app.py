@@ -362,15 +362,8 @@ def page_overview():
                 # )
                 
 def page_archief():
-
-    st.title("📦 Archief")
-
     data = get_all_houses()
-
-    if not data:
-        st.info("Geen data beschikbaar.")
-        return
-
+    
     df = pd.DataFrame(data)
 
     archive_status_priority = {
@@ -382,6 +375,16 @@ def page_archief():
     archive_statuses = list(archive_status_priority.keys())
 
     df = df[df["status"].isin(archive_statuses)]
+    
+    count_archive = len(df) if not df.empty else 0
+
+
+    st.title(f"📦 Archief ({count_archive})")
+
+    if not data:
+        st.info("Geen data beschikbaar.")
+        return
+
 
     # Sorting
     df["sort_key"] = df["status"].map(archive_status_priority)
@@ -402,30 +405,30 @@ def page_archief():
 
         card_html = f"""
         <a href="{row['url']}" target="_blank" style="text-decoration:none;">
-        
+
         <div style="
             background: rgba(255,255,255,0.55);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-        
+
             border-radius:14px;
             border:1px solid rgba(229,231,235,0.6);
-        
+
             padding:14px;
             margin-bottom:12px;
-        
+
             cursor:pointer;
             transition:all 0.25s ease;
-        
+
             font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        
+
             box-shadow:0 4px 20px rgba(0,0,0,0.05);
         "
         onmouseover="this.style.transform='translateY(-3px)'"
         onmouseout="this.style.transform='translateY(0px)'">
-        
+
             <div style="display:flex; justify-content:space-between; align-items:center;">
-        
+
                 <div style="
                     font-size:16px;
                     font-weight:600;
@@ -435,7 +438,7 @@ def page_archief():
                 ">
                     {row["address"]}
                 </div>
-        
+
                 <span style="
                     background:{status_color(row['status'])};
                     padding:4px 8px;
@@ -445,9 +448,9 @@ def page_archief():
                 ">
                     {row["status"]}
                 </span>
-        
+
             </div>
-        
+
             <div style="
                 font-size:14px;
                 color:#374151;
@@ -455,9 +458,9 @@ def page_archief():
             ">
                 💰 € {row["price"]} · 📏 {row["surface_m2"]} m² · {row["bedrooms"]} slpk
             </div>
-        
+
         </div>
-        
+
         </a>
         """
         components.html(card_html, height=140, scrolling=False)
