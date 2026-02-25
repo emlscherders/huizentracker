@@ -1,3 +1,5 @@
+from itertools import count
+
 import streamlit as st
 import os
 import pandas as pd
@@ -114,12 +116,14 @@ def status_color(status):
 # -----------------------------
 
 def page_new_houses():
-    st.title("🆕 Nieuwe Huizen")
-
     houses = supabase.table("houses") \
         .select("*") \
         .eq("status", "nieuw") \
         .execute().data
+    
+    count = len(houses) if houses else 0
+
+    st.title(f"🆕 Nieuwe Huizen ({count})")
 
     if not houses:
         st.info("Geen nieuwe huizen gevonden.")
