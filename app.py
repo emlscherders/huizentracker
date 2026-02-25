@@ -48,10 +48,11 @@ def get_all_houses():
 
 def status_color(status):
     colors = {
-        "nieuw": "#FFFFFF",
-        "bezichtiging gepland": "#FFA500",
-        "bezichtiging geweest": "#F5F10B",
-        "bod gedaan": "#3B82F6",
+        "nieuw": "#28FE02",
+        "bericht gestuurd": "#F63BF3",
+        "bezichtiging gepland": "#FF9900",
+        "bezichtiging geweest": "#0BD2F5",
+        "bod gedaan": "#3B3EF6",
         "bod geaccepteerd": "#22C55E",
         "niet geïnteresseerd": "#EF4444",
         "niet geboden": "#EF4444",
