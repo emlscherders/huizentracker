@@ -113,11 +113,34 @@ def status_color(status):
         "bod gedaan": "#3B3EF6",
         "bod geaccepteerd": "#22C55E",
         "niet geïnteresseerd": "#EF4444",
-        "niet geboden": "#EF4444",
-        "bod niet geaccepteerd": "#EF4444",
+        "niet geboden": "#F17878",
+        "bod niet geaccepteerd": "#A30909",
     }
     return colors.get(status, "white")
 
+# ---------- Sorting rule for bezichtiging ----------
+def bezichtiging_sort_key(status):
+    priority = {
+        "bezichtiging gepland": 0,
+        "bericht gestuurd": 1,
+        "bezichtiging geweest": 2
+    }
+    return priority.get(status, 99)
+
+def nieuw_sort_key(status):
+    priority = {
+        "potential": 0,
+        "nieuw": 1
+    }
+    return priority.get(status, 99)
+
+def afgevallen_sort_key(status):
+    priority = {
+        "bod niet geaccepteerd": 0,
+        "niet geboden": 1,
+        "niet geïnteresseerd": 2,
+    }
+    return priority.get(status, 99)
 
 # -----------------------------
 # PAGE 1 — Nieuwe huizen
@@ -206,15 +229,6 @@ def page_overview():
         "🏆 JAVA PALACE": ["bod geaccepteerd"]
     }
 
-    # ---------- Sorting rule for bezichtiging ----------
-    def bezichtiging_sort_key(status):
-        priority = {
-            "bezichtiging gepland": 0,
-            "bericht gestuurd": 1,
-            "bezichtiging geweest": 2
-        }
-        return priority.get(status, 99)
-
     cols = st.columns([1,1,1,1,1], gap="small")
 
     for col, (column_name, statuses) in zip(cols, kanban_columns.items()):
@@ -223,11 +237,23 @@ def page_overview():
 
             filtered = df[df["status"].isin(statuses)]
 
-            # Sort only in bezichtiging column
+            # Sorting rules per column
             if column_name == "👀 Bezichtiging":
                 filtered = filtered.sort_values(
                     by="status",
                     key=lambda x: x.map(bezichtiging_sort_key)
+                )
+
+            elif column_name == "🆕 Nieuw":
+                filtered = filtered.sort_values(
+                    by="status",
+                    key=lambda x: x.map(nieuw_sort_key)
+                )
+            
+            elif column_name == "❌ Afgevallen":
+                filtered = filtered.sort_values(
+                    by="status",
+                    key=lambda x: x.map(afgevallen_sort_key)
                 )
 
             for _, house in filtered.iterrows():
