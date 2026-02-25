@@ -69,7 +69,7 @@ supabase = create_client(url, key)
 STATUS_OPTIONS = [
     "nieuw",
     "niet geïnteresseerd",
-    "on hold",
+    "potential",
     "bericht gestuurd",
     "bezichtiging gepland",
     "bezichtiging geweest",
@@ -78,6 +78,13 @@ STATUS_OPTIONS = [
     "bod niet geaccepteerd",
     "bod geaccepteerd"
 ]
+
+STATUS_OPTIONS_NEW = [
+    "niet geïnteresseerd",
+    "potential",
+    "bericht gestuurd",
+]
+
 
 # -----------------------------
 # HELPERS
@@ -99,6 +106,7 @@ def get_all_houses():
 def status_color(status):
     colors = {
         "nieuw": "#28FE02",
+        "potential": "#FACC15",
         "bericht gestuurd": "#F63BF3",
         "bezichtiging gepland": "#FF9900",
         "bezichtiging geweest": "#0BD2F5",
@@ -140,12 +148,12 @@ def page_new_houses():
 
         # POST style form
         with st.form(key=f"form_{house['id']}"):
-            current_index = STATUS_OPTIONS.index(house["status"]) \
-                if house["status"] in STATUS_OPTIONS else 0
+            current_index = STATUS_OPTIONS_NEW.index(house["status"]) \
+                if house["status"] in STATUS_OPTIONS_NEW else 0
 
             new_status = st.selectbox(
                 "Status wijzigen",
-                STATUS_OPTIONS,
+                STATUS_OPTIONS_NEW,
                 index=current_index
             )
 
@@ -183,7 +191,7 @@ def page_overview():
     df = pd.DataFrame(data)
 
     kanban_columns = {
-        "🆕 Nieuw": ["nieuw"],
+        "🆕 Nieuw": ["nieuw", "potential"],
         "👀 Bezichtiging": [
             "bezichtiging gepland",
             "bericht gestuurd",
