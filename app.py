@@ -337,7 +337,7 @@ def page_overview():
 
                 # ---------- Popup status selector ----------
                 if st.session_state.editing_house == house["id"]:
-                
+
                     new_status = st.selectbox(
                         "Wijzig status",
                         STATUS_OPTIONS,
@@ -347,7 +347,7 @@ def page_overview():
 
                     # Auto-save zonder flash rerun
                     if new_status != house["status"]:
-                    
+
                         update_status(house["id"], new_status)
 
                         # Update session state lokaal zodat UI niet flasht
@@ -356,6 +356,9 @@ def page_overview():
                         st.toast("✅ Status opgeslagen", icon="✅")
 
                         st.session_state.editing_house = None
+
+                        # Auto-refresh page with fresh data
+                        st.rerun()
                 # st.selectbox(
                 #     "",
                 #     STATUS_OPTIONS,
