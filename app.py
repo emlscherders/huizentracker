@@ -73,6 +73,7 @@ STATUS_OPTIONS = [
     "bericht gestuurd",
     "bezichtiging gepland",
     "bezichtiging geweest",
+    "geen bezichtiging plek",
     "niet geboden",
     "bod gedaan",
     "bod niet geaccepteerd",
@@ -114,6 +115,7 @@ def status_color(status):
         "bod geaccepteerd": "#22C55E",
         "niet geïnteresseerd": "#EF4444",
         "niet geboden": "#F17878",
+        "geen bezichtiging plek": "#A30909",
         "bod niet geaccepteerd": "#A30909",
     }
     return colors.get(status, "white")
@@ -138,7 +140,8 @@ def afgevallen_sort_key(status):
     priority = {
         "bod niet geaccepteerd": 0,
         "niet geboden": 1,
-        "niet geïnteresseerd": 2,
+        "geen bezichtiging plek": 2,
+        "niet geïnteresseerd": 3,
     }
     return priority.get(status, 99)
 
@@ -214,12 +217,12 @@ def page_overview():
     df = pd.DataFrame(data)
 
     kanban_columns = {
-        "🆕 Nieuw": ["nieuw", "potential"],
+        "✨ Potentials": ["potential"],
         "👀 Bezichtiging": [
             "bezichtiging gepland",
-            "bericht gestuurd",
-            "bezichtiging geweest"
+            "bericht gestuurd",  
         ],
+        "🤔 To bied or not to bied":[ "bezichtiging geweest"],
         "💰 Bieden": ["bod gedaan"],
         "🏆 JAVA PALACE": ["bod geaccepteerd"]
     }
