@@ -152,6 +152,7 @@ def page_new_houses():
     houses = supabase.table("houses") \
         .select("*") \
         .eq("status", "nieuw") \
+        .order("publish_date", desc=True) \
         .execute().data
     
     count = len(houses) if houses else 0
@@ -165,9 +166,25 @@ def page_new_houses():
     for house in houses:
         st.divider()
 
+        date = datetime.strptime(house['publish_date'], "%Y-%m-%d")
+        days_ago = (datetime.now() - date).days
+
+        if days_ago == 0:
+            days_ago_text = "Vandaag"
+        elif days_ago == 1:
+            days_ago_text = "Gisteren"
+        else:
+            days_ago_text = f"{days_ago} dagen geleden"
+
         st.subheader(house["address"])
-        st.write(f"💰 € {house['price']}")
-        st.write(f"📏 {house['surface_m2']} m² · {house['bedrooms']} slaapkamers")
+        st.markdown(
+            f"""
+            <span style="color: gray; font-size: 0.85em;">{days_ago_text}</span> <br>
+            **💰 € {house['price']}**  
+            📏 {house['surface_m2']} m² · {house['bedrooms']} slaapkamers  
+            """,
+            unsafe_allow_html=True
+        )
         st.markdown(f"[🔗 Bekijk op Funda]({house['url']})")
 
         # Status buttons below the card
