@@ -86,6 +86,38 @@ STATUS_OPTIONS_NEW = [
     "bericht gestuurd",
 ]
 
+STATUS_OPTIONS_POTENTIAL = [
+    "wijzig status ...",
+    "niet geïnteresseerd",
+    "bericht gestuurd",
+]
+
+STATUS_OPTIONS_BERICHT_GESTUURD = [
+    "wijzig status ...",
+    "bezichtiging gepland",
+    "geen bezichtiging plek",
+    "niet geïnteresseerd",
+]
+
+STATUS_OPTIONS_BEZICHTIGING = [
+    "wijzig status ...",
+    "bezichtiging geweest",
+    "niet geïnteresseerd",
+]
+
+STATUS_OPTIONS_BEZICHTIGING_GEWEEST = [
+    "wijzig status ...",
+    "niet geboden",
+    "bod gedaan",
+]
+
+STATUS_OPTIONS_BIEDEN = [
+    "wijzig status ...",
+    "bod niet geaccepteerd",
+    "bod geaccepteerd"
+]
+
+
 
 # -----------------------------
 # HELPERS
@@ -352,16 +384,26 @@ def page_overview():
 
                 # ---------- Popup status selector ----------
                 if st.session_state.editing_house == house["id"]:
+                    if house["status"] == "potential":
+                        options = STATUS_OPTIONS_POTENTIAL
+                    elif house["status"] == "bericht gestuurd":
+                        options = STATUS_OPTIONS_BERICHT_GESTUURD
+                    elif house["status"] == "bezichtiging gepland":
+                        options = STATUS_OPTIONS_BEZICHTIGING
+                    elif house["status"] == "bezichtiging geweest":
+                        options = STATUS_OPTIONS_BEZICHTIGING_GEWEEST
+                    elif house["status"] == "bod gedaan":
+                        options = STATUS_OPTIONS_BIEDEN
 
                     new_status = st.selectbox(
                         "Wijzig status",
-                        STATUS_OPTIONS,
-                        index=STATUS_OPTIONS.index(house["status"]),
+                        options,
+                        index=0,
                         key=f"popup_status_{house['id']}"
                     )
 
                     # Auto-save zonder flash rerun
-                    if new_status != house["status"]:
+                    if new_status != "wijzig status ...":
 
                         update_status(house["id"], new_status)
 
