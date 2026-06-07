@@ -88,7 +88,7 @@ def is_available(listing) -> bool:
 
 def transform_listing(listing):
     return {
-        "id": listing.id,
+        "id": listing.global_id,
         "address": listing.title,
         "neighbourhood": listing.address.neighbourhood,
         "city": listing.city,
@@ -137,7 +137,7 @@ def main():
         #     print("Filtered: Not available")
         #     continue
 
-        if listing.id in existing_ids:
+        if listing.global_id in existing_ids:
             print("Filtered: Already exists in database")
             continue
 
