@@ -36,7 +36,7 @@ st.markdown("""
     margin-bottom: 6px;
 }
 
-/* Kleine tekst */
+/py* Kleine tekst */
 .kanban-meta {
     font-size: 14px;
     margin-bottom: 4px;
