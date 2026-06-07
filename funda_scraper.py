@@ -25,11 +25,12 @@ OBJECT_TYPE = None
 ENERGY_LABEL = None
 MAX_PAGES = 2
 ALLOWED_POSTCODES = {
-    *range(1011, 1020),  # centrum/aan IJ: 1011–1019
-    *range(1051, 1060),  # west:           1051–1059
+    *range(1011, 1019),  # centrum/aan IJ: 1011–1018
+    *range(1051, 1055),  # west:           1051–1054
+    *range(1056, 1060),  # west:           1056–1059
     *range(1071, 1080),  # zuid:           1071–1079
-    *range(1091, 1095),  # oost:           1091–1093
-    *range(1096, 1099),  # oost:           1096–1098
+    *range(1091, 1095),  # oost:           1091–1094
+    *range(1096, 1098),  # oost:           1096–1097
 }
 
 
