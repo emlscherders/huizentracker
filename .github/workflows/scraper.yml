@@ -2,7 +2,7 @@ name: Funda Scraper
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # elke 30 minuten
+   # - cron: "*/30 * * * *"   # elke 30 minuten
   workflow_dispatch:         # handmatig starten via GitHub
 
 jobs:
